@@ -2,13 +2,12 @@ package com.ipi.jva320.controller;
 
 import com.ipi.jva320.exception.SalarieException;
 import com.ipi.jva320.model.SalarieAideADomicile;
+import com.ipi.jva320.repository.SalarieAideADomicileRepository;
 import com.ipi.jva320.service.SalarieAideADomicileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class HomeController {
@@ -16,6 +15,14 @@ public class HomeController {
     @Autowired
     private SalarieAideADomicileService salarieAideADomicileService;
 
+    @Autowired
+    private SalarieAideADomicileRepository salarieAideADomicileRepository;
+
+    @GetMapping(value = "/deleteSalarie")
+    public String deleteSalarie(@RequestParam Long id) throws SalarieException {
+        salarieAideADomicileRepository.deleteById(id);
+        return "redirect:/salaries";
+    }
 
     @GetMapping(value = "/")
     public String home(ModelMap model) {
@@ -51,5 +58,4 @@ public class HomeController {
         model.put("salaries", salarieAideADomicileService.getSalaries());
         return "list";
     }
-
 }

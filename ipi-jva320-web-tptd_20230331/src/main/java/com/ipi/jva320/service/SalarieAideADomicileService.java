@@ -114,7 +114,7 @@ public class SalarieAideADomicileService {
         }
         Optional<SalarieAideADomicile> existantOptional = salarieAideADomicileRepository.findById(id);
         if (existantOptional.isEmpty()) {
-            throw new SalarieException("Le salarié n'existe pas déjà d'id " + id); // TODO id ou nom ??
+            throw new SalarieException("Le salarié avec l'id : " + id + "n'existe pas");
         }
         salarieAideADomicileRepository.deleteById(id);
     }
