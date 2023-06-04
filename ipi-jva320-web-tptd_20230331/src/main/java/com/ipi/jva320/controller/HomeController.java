@@ -5,11 +5,15 @@ import com.ipi.jva320.model.SalarieAideADomicile;
 import com.ipi.jva320.repository.SalarieAideADomicileRepository;
 import com.ipi.jva320.service.SalarieAideADomicileService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Controller
@@ -20,20 +24,6 @@ public class HomeController {
 
     @Autowired
     private SalarieAideADomicileRepository salarieAideADomicileRepository;
-
-    @GetMapping(value = "/deleteSalarie")
-    public String deleteSalarie(@RequestParam Long id) throws SalarieException {
-        salarieAideADomicileRepository.deleteById(id);
-        return "redirect:/salaries";
-    }
-
-    @RequestMapping(value = "/salarie/findSalarieByName")
-    public ModelAndView findSalarieByName(@RequestParam String name){
-        ModelAndView salarie = new ModelAndView("list");
-        List<SalarieAideADomicile> salarieList = salarieAideADomicileService.getSalaries(name);
-        salarie.addObject("salaries",salarieList);
-        return salarie;
-    }
 
     @GetMapping(value = "/")
     public String home(ModelMap model) {
@@ -68,5 +58,29 @@ public class HomeController {
     public String getSalaries(ModelMap model) {
         model.put("salaries", salarieAideADomicileService.getSalaries());
         return "list";
+    }
+
+    @GetMapping(value = "/deleteSalarie")
+    @ResponseStatus(value = HttpStatus.OK)
+    public String deleteSalarie(@RequestParam Long id) {
+        try {
+            salarieAideADomicileRepository.deleteById(id);
+            return "redirect:/salaries";
+        } catch (EntityNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aucun salarié " + id + "trouvé");
+        }
+    }
+
+    @RequestMapping(value = "/salarie/findSalarieByName")
+    @ResponseStatus(HttpStatus.OK)
+    public ModelAndView findSalarieByName(@RequestParam String name) {
+        ModelAndView salarie = new ModelAndView("list");
+        try {
+            List<SalarieAideADomicile> salarieList = salarieAideADomicileService.getSalaries(name);
+            salarie.addObject("salaries", salarieList);
+            return salarie;
+        } catch (EntityNotFoundException e){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aucun salarié " + name + "trouvé");
+        }
     }
 }
