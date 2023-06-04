@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -22,6 +25,14 @@ public class HomeController {
     public String deleteSalarie(@RequestParam Long id) throws SalarieException {
         salarieAideADomicileRepository.deleteById(id);
         return "redirect:/salaries";
+    }
+
+    @RequestMapping(value = "/salarie/findSalarieByName")
+    public ModelAndView findSalarieByName(@RequestParam String name){
+        ModelAndView salarie = new ModelAndView("list");
+        List<SalarieAideADomicile> salarieList = salarieAideADomicileService.getSalaries(name);
+        salarie.addObject("salaries",salarieList);
+        return salarie;
     }
 
     @GetMapping(value = "/")
