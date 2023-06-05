@@ -42,7 +42,7 @@ public class HomeController {
     @PostMapping(value = "/salaries/save")
     public String createSalarie(SalarieAideADomicile salarie) throws SalarieException {
         salarieAideADomicileService.creerSalarieAideADomicile(salarie);
-        return "redirect:/salaries/" + salarie.getId();
+        return "redirect:/salaries/";
     }
 
     @PostMapping(value = "/salaries/{id}")
