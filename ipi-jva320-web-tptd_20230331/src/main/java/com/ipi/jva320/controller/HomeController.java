@@ -33,6 +33,7 @@ public class HomeController {
 
     @GetMapping(value = "/salaries/{id}")
     public String salarie(ModelMap model, @PathVariable Long id) {
+        model.put("salarieCount", salarieAideADomicileService.countSalaries());
         model.put("salarie", salarieAideADomicileService.getSalarie(id));
         return "detail_Salarie";
     }
@@ -56,12 +57,12 @@ public class HomeController {
 
     @GetMapping(value = "/salaries")
     public String getSalaries(ModelMap model) {
+        model.put("salarieCount", salarieAideADomicileService.countSalaries());
         model.put("salaries", salarieAideADomicileService.getSalaries());
         return "list";
     }
 
     @GetMapping(value = "/deleteSalarie")
-    @ResponseStatus(value = HttpStatus.OK)
     public String deleteSalarie(@RequestParam Long id) {
         try {
             salarieAideADomicileRepository.deleteById(id);
@@ -78,6 +79,7 @@ public class HomeController {
         try {
             List<SalarieAideADomicile> salarieList = salarieAideADomicileService.getSalaries(name);
             salarie.addObject("salaries", salarieList);
+            salarie.addObject("salarieCount", salarieAideADomicileService.countSalaries());
             return salarie;
         } catch (EntityNotFoundException e){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Aucun salarié " + name + "trouvé");
