@@ -92,29 +92,13 @@
                 </div>
             </div>
         </div>
-
-        
     </form>
-    
-    <div class="row">
-        <div class="col-lg-6">
-            <ul class="list-group list-unstyled">
-                <li class="alert alert-danger" role="alert">Erreur dans un champ !</li>
-            </ul>
-        </div>
-    </div>
+
     <div class="row mt-2">
         <div class="col-lg-6">
             <input form="saveForm" class="btn btn-primary" type="submit" value="Enregistrer">
             <a th:href="@{/deleteSalarie(id=${salarie.id})}" class="btn btn-danger">Supprimer</a>
         </div>
-    </div>
-
-    <div class="row">
-    <table>
-        <tr><td class="alert alert-danger" role="alert">Erreur de type de données !</td></tr>
-    </table>
-    <div>Erreur globale spécifique !</div>
     </div>
 </div>
 
